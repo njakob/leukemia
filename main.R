@@ -13,23 +13,45 @@ data <- data.frame(
     sep=""
   )
 );
-input <- data[,1:1000]
-classes <- data[,1001]
+colnames(data) <- c( 1:datasetSize, "class");
+
+input <- data[,1:datasetSize]
+classes <- data[,datasetSize+1]
 
 ### genetic wrapper
 
+## initial population
+populate <- function(ga){
+  
+  results <- matrix(0,nrow=ga.popsize,ncol=datasetSize)
+  
+  for ( j in 1:ga.popsize){  
+    # get some random genes (positions in the chromosome)
+    genes <- sample(1:datasetSize,maxGeneSelectionSize);
+    
+    # then set them to 1
+    for ( i in (1:maxGeneSelectionSize) ) {
+      results[j,genes[i]] = 1;
+    }
+
+  }
+  
+  return(results); 
+}
+
 ## evaluation function
-evaluate <- function(x) {
+evaluate <- function(x,y) {
+
   # x <- c(1,0,1,....) # size limit set before
-  if (sum(x) > 50)
-    return (0) # TODO: set a regressive formula
-  else
-    return(1);
+  if (sum(x) > maxGeneSelectionSize) {
+    print("too big");
+    return (0); # TODO: set a regressive formula
+  } else if (sum(x) < maxGeneSelectionSize - 5){
+    return (1);
+  } else {
+    return(runif(1,0,1));
+  }    
   
-  # genes <- dataset[,x=1]
-  
-  # current_solution_survivalpoints <- x %*% input[1,]
-  #survivalpoints current_solution_weight <- x %*% dataset$weight  if (current_solution_weight > weightlimit)  return(0) else return(-current_solution_survivalpoints)
 }
 
 ## Launch genetic algorithm
@@ -38,6 +60,7 @@ GA <- ga(
   nBits = ncol(input),
   #min = 0,
   #max = 1000,
+  population = populate,
   fitness = evaluate,
   maxiter = 1000,
   run = 200,
@@ -46,5 +69,12 @@ GA <- ga(
   pmutation = 0.1,
 );
 
-summary(GA);
+#print(summary(GA));
 plot(GA);
+
+# print genes
+for (i in 1:nrow(GA@solution)){
+  chromosome <- GA@solution[1,];
+  print(paste("Best chromosome #:",i," with #",sum(chromosome)," genes"));
+  print(colnames(input)[chromosome==1]);
+}

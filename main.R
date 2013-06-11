@@ -1,14 +1,20 @@
 ### dependencies
 #install.packages("GA_1.1", type="source");
 #install.packages("C50", type="source");
+#install.packages("e1071", type="source");
 library("GA");
 library("C50");
+library("e1071");
+
+setwd("~/R workspace/Leukemia")
 
 ### params
-datasetSize <- 1000;
+datasetSize <- 10000;
 maxGeneSelectionSize <- 50;
-populationSize <- 20;
+populationSize <- 200;
 numGenerations <- 50;
+chromosomeLenghtWeight <- 0.2;
+classificationWeight <- 0.8;
 
 ### load data
 data <- data.frame(

@@ -12,13 +12,13 @@ source(file="common.R");
 source(file="genetic_functions.R");
 
 ### params
-datasetSize <- 1000;
-maxGeneSelectionSize <- 75;
-populationSize <- 20;
-numGenerations <- 20;
-weight.chromosomeLength <- 0.2;      # higher to emphasize smaller chromosomes (less genes involved)
-weight.accuracy <- 0.5;  # higher to emphasize general classificator performance
-weight.specificity <- 0.3; # higher to emphasize better crossed classification performance
+datasetSize <- 10000;
+maxGeneSelectionSize    <- 30;  # lower to emphasize smaller chromosomes from the first population; it takes 1 when 0 and 0 when 2*maxGeneSelectionSize
+populationSize          <- 1000;
+numGenerations          <- 100;
+weight.chromosomeLength <- 0.1; # higher to emphasize smaller chromosomes (less genes involved)
+weight.accuracy         <- 0.6; # higher to emphasize general classificator performance
+weight.specificity      <- 0.3; # higher to emphasize better crossed classification performance
 
 ### load data
 data <- data.frame(
@@ -58,6 +58,6 @@ plot(GA);
 # print genes
 for (i in 1:nrow(GA@solution)){
   chromosome <- GA@solution[i,];
-  print(paste("Best chromosome #:",i," with #",sum(chromosome)," genes"));
+  print(paste("Best chromosome: #",i," with ",sum(chromosome)," genes",sep=""));
   print(getSelectedGenes(chromosome));
 }

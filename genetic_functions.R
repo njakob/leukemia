@@ -49,7 +49,7 @@ evaluate <- function(x,y) {
     # weight and add
     score = lengthScore*weight.chromosomeLength + accuracyScore*weight.accuracy + specificityScore*weight.specificity;
 
-    print(paste("Scores => length: ",lengthScore,"; accuracy: ", accuracyScore, "; specificity: ", specificityScore, "; total: ",score, sep=""));
+    print(paste("Scores => length:",lengthScore,"accuracy:", accuracyScore, "specificity:", specificityScore, "total:", score));
       
     return(score);
   }

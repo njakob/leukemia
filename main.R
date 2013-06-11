@@ -5,6 +5,7 @@ library("GA");
 ### params
 datasetSize <- 1000;
 maxGeneSelectionSize <- 50;
+populationSize <- 20;
 
 ### load data
 data <- data.frame(
@@ -19,40 +20,7 @@ input <- data[,1:datasetSize]
 classes <- data[,datasetSize+1]
 
 ### genetic wrapper
-
-## initial population
-populate <- function(ga){
-  
-  results <- matrix(0,nrow=ga.popsize,ncol=datasetSize)
-  
-  for ( j in 1:ga.popsize){  
-    # get some random genes (positions in the chromosome)
-    genes <- sample(1:datasetSize,maxGeneSelectionSize);
-    
-    # then set them to 1
-    for ( i in (1:maxGeneSelectionSize) ) {
-      results[j,genes[i]] = 1;
-    }
-
-  }
-  
-  return(results); 
-}
-
-## evaluation function
-evaluate <- function(x,y) {
-
-  # x <- c(1,0,1,....) # size limit set before
-  if (sum(x) > maxGeneSelectionSize) {
-    print("too big");
-    return (0); # TODO: set a regressive formula
-  } else if (sum(x) < maxGeneSelectionSize - 5){
-    return (1);
-  } else {
-    return(runif(1,0,1));
-  }    
-  
-}
+source(file="genetic_functions.R");
 
 ## Launch genetic algorithm
 GA <- ga(
@@ -64,7 +32,7 @@ GA <- ga(
   fitness = evaluate,
   maxiter = 1000,
   run = 200,
-  popSize = 20,
+  popSize = populationSize,
   pcrossover = 0.8,
   pmutation = 0.1,
 );

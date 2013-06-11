@@ -35,35 +35,37 @@ evaluate <- function(x,y) {
     # so that the center is on maxGeneSelectionSize
     m = (1/maxGeneSelectionSize);
     
+    # prepare data for validation
+    filteredData <- getDataFilteredByChromosome(x);
+    validationData <- filteredData[sample(nrow(filteredData), round(nrow(data)*0.33)),];
+    trainingData <- filteredData[setdiff(rownames(filteredData), rownames(validationData)),];
+    classified <- getClassifiedResults(trainingData,validationData);
+    
     # get the scores
-    lenghtScore = 1+m - m*count;
-    classificationScore = getClassificationEvaluation(x);
+    lengthScore = 1 - m*count;
+    accuracyScore = getAccuracyScore(classified,validationData$class);
+    specificityScore = getSpecificityScore(classified,validationData$class);
     
     # weight and add
-    score = lenghtScore * chromosomeLenghtWeight + classificationScore * classificationWeight;
+    score = lengthScore*weight.chromosomeLength + accuracyScore*weight.accuracy + specificityScore*weight.specificity;
 
-    print(paste("Classification score:",classificationScore));
-    
+    print(paste("Scores => length: ",lengthScore,"; accuracy: ", accuracyScore, "; specificity: ", specificityScore, "; total: ",score, sep=""));
+      
     return(score);
   }
   
 }
 
-## Interfaces the classificator to get a real evaluation
-getClassificationEvaluation <- function(x) {  
+## produces a sampls validation data
+getDataFilteredByChromosome <- function(chromosome){
   # translate chromosome into genes list
-  genes <- getSelectedGenes(x);
-
+  genes <- getSelectedGenes(chromosome);
+  
   # filter out the columns not selected by the chromosome
   filteredData <- data[,genes];
   filteredData$class <- data$class;
-
-  # prepare validation & training datasets
-  validationData <- filteredData[sample(nrow(filteredData), round(nrow(data)*0.33)),];
-  trainingData <- filteredData[setdiff(rownames(filteredData), rownames(validationData)),];
-  classified <- getClassifiedResults(trainingData,validationData);
-
-  return(getScore(classified,validationData$class));
+  
+  return(filteredData);
 }
 
 ## Creates a learner and classifies 
@@ -95,7 +97,9 @@ getClassifiedResultsC5 <- function(trainingData,validationData){
 }
 
 ## Calculates the score according to the classificator results
-getScore <- function(classified,classes){
+## It considers only total right guessed classes
+## (Mesure of accuracy)
+getAccuracyScore <- function(classified,classes){
   
   correct <- length(which(classified == classes))
   total <- length(classified)
@@ -103,4 +107,43 @@ getScore <- function(classified,classes){
   score <- correct/total;
   
   return (score);
+}
+
+## Checks the crossed classification score (guessed Vs. actual class)
+## It takes out right matches
+## (Mesure of specificity)
+getSpecificityScore <- function(classified,classes){
+  
+  different <- which(classified != classes);
+  
+  diffClassified <- classified[different];
+  diffClasses <- classes[different];
+  
+  total <- length(diffClassified);
+  score <- 1;
+  
+  for (i in 1:total){
+    score <- score+getScoreByClassGuessResult(diffClasses[i],diffClassified[i]);
+  }
+  
+  return (score/total);
+}
+
+
+getScoreByClassGuessResult <- function(actual,guessed){
+  # in cols, the guessed classes
+  # in rows, the actual classes
+  # matrix[actual,guessed] == the relative score of having guessed a class for the corrsponding actual value
+  scoreByClassesMatrix <- data.frame( 
+    #c("AML","CML","ALL","CLL","NO")
+    c(1.00, 0.50, 0.75, 0.25, 0.00),
+    c(0.50, 1.00, 0.25, 0.75, 0.50),
+    c(0.75, 0.25, 1.00, 0.50, 0.50),
+    c(0.50, 0.25, 0.75, 1.00, 0.50),
+    c(0.50, 0.75, 0.50, 0.75, 1.00)
+  );
+  colnames(scoreByClassesMatrix) <- c("AML","CML","ALL","CLL","NO");
+  rownames(scoreByClassesMatrix) <- c("AML","CML","ALL","CLL","NO");
+  
+  return(scoreByClassesMatrix[actual,guessed]);  
 }

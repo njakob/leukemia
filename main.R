@@ -8,13 +8,17 @@ library("e1071");
 
 setwd("~/R workspace/Leukemia")
 
+source(file="common.R");
+source(file="genetic_functions.R");
+
 ### params
-datasetSize <- 10000;
-maxGeneSelectionSize <- 50;
-populationSize <- 200;
-numGenerations <- 50;
-chromosomeLenghtWeight <- 0.2;
-classificationWeight <- 0.8;
+datasetSize <- 1000;
+maxGeneSelectionSize <- 75;
+populationSize <- 20;
+numGenerations <- 20;
+weight.chromosomeLength <- 0.2;      # higher to emphasize smaller chromosomes (less genes involved)
+weight.accuracy <- 0.5;  # higher to emphasize general classificator performance
+weight.specificity <- 0.3; # higher to emphasize better crossed classification performance
 
 ### load data
 data <- data.frame(
@@ -25,12 +29,13 @@ data <- data.frame(
 );
 colnames(data) <- c( 1:datasetSize, "class");
 
+### pre-process it to extract main leukemia classes
+data <- createSuperClassesInData(data);
+
 input <- data[,1:datasetSize]
 classes <- data[,datasetSize+1]
 
 ### genetic wrapper
-source(file="common.R");
-source(file="genetic_functions.R");
 
 ## Launch genetic algorithm
 GA <- ga(

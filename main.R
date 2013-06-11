@@ -1,14 +1,27 @@
-
+### dependencies
+install.packages("GA_1.1", type="source");
 library("GA");
 
+### params
+datasetSize <- 1000;
 
+### load data
+input <- data.frame(
+  read.csv(
+    paste("/media/KINGSTON/MLBD/allDataNoNAClass",datasetSize,".txt",sep=""),
+    sep=""
+  )
+);
 
+### genetic wrapper
+
+## evaluation function
 evaluate <- function(gene) {
   print(gene)
   1
 }
 
-# Launch genetic algorithm
+## Launch genetic algorithm
 GA <- ga(
   "permutation",
   min = 0,

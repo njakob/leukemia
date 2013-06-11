@@ -1,11 +1,14 @@
 ### dependencies
 #install.packages("GA_1.1", type="source");
+#install.packages("C50", type="source");
 library("GA");
+library("C50");
 
 ### params
 datasetSize <- 1000;
 maxGeneSelectionSize <- 50;
 populationSize <- 20;
+numGenerations <- 50;
 
 ### load data
 data <- data.frame(
@@ -20,6 +23,7 @@ input <- data[,1:datasetSize]
 classes <- data[,datasetSize+1]
 
 ### genetic wrapper
+source(file="common.R");
 source(file="genetic_functions.R");
 
 ## Launch genetic algorithm
@@ -30,8 +34,8 @@ GA <- ga(
   #max = 1000,
   population = populate,
   fitness = evaluate,
-  maxiter = 1000,
-  run = 200,
+  maxiter = numGenerations,
+  #run = 200,
   popSize = populationSize,
   pcrossover = 0.8,
   pmutation = 0.1,
@@ -42,7 +46,7 @@ plot(GA);
 
 # print genes
 for (i in 1:nrow(GA@solution)){
-  chromosome <- GA@solution[1,];
+  chromosome <- GA@solution[i,];
   print(paste("Best chromosome #:",i," with #",sum(chromosome)," genes"));
-  print(colnames(input)[chromosome==1]);
+  print(getSelectedGenes(chromosome));
 }

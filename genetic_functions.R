@@ -123,27 +123,8 @@ getSpecificityScore <- function(classified,classes){
   score <- 1;
   
   for (i in 1:total){
-    score <- score+getScoreByClassGuessResult(diffClasses[i],diffClassified[i]);
+    score <- score+scoreByClassesMatrix(diffClasses[i],diffClassified[i]);
   }
   
   return (score/total);
-}
-
-
-getScoreByClassGuessResult <- function(actual,guessed){
-  # in cols, the guessed classes
-  # in rows, the actual classes
-  # matrix[actual,guessed] == the relative score of having guessed a class for the corrsponding actual value
-  scoreByClassesMatrix <- data.frame( 
-    #c("AML","CML","ALL","CLL","NO")
-    c(1.00, 0.50, 0.75, 0.25, 0.00),
-    c(0.50, 1.00, 0.25, 0.75, 0.50),
-    c(0.75, 0.25, 1.00, 0.50, 0.50),
-    c(0.50, 0.25, 0.75, 1.00, 0.50),
-    c(0.50, 0.75, 0.50, 0.75, 1.00)
-  );
-  colnames(scoreByClassesMatrix) <- c("AML","CML","ALL","CLL","NO");
-  rownames(scoreByClassesMatrix) <- c("AML","CML","ALL","CLL","NO");
-  
-  return(scoreByClassesMatrix[actual,guessed]);  
 }

@@ -1,0 +1,52 @@
+                                   Test 01
+-------------------------------------------------------------------------------
+
+Testing with a big population on the biggest dataset, it took several hours.
+Generations raised to 100 to allow convergence (which happened around the 65th
+iteration).
+
+Weights are set so that accuracy is important, then specificity and finally
+lenght is a little bit considered. It is interesting how starting from a small
+population (30) it is easier to converge to smaller chromosomes (14 in this
+case) than when using larger initial populations (50 which converged to around
+40 genes). The size of the dataset helps here identifying better candidates.
+
+Finally, the specificity matrix is set based on the strong precaution principle
+and therefore it is better to be diagnosed with a more serius condition than 
+the actual one (acute vs chronic, chronic vs healthy). The matrix is not 
+simmetric to emphasize "false positives" (more severe condition detected than 
+it is actually suffered) than "false negatives" (which would lead to a
+deterioration in the patient's health). 
+
+                                 Best result
+-------------------------------------------------------------------------------
+
+Params:
+  datasetSize             <- 10000;
+  maxGeneSelectionSize    <- 30;    
+  populationSize          <- 1000;
+  numGenerations          <- 100;
+  weight.chromosomeLength <- 0.1; 
+  weight.accuracy         <- 0.6; 
+  weight.specificity      <- 0.3;
+
+  # "AML", "CML", "ALL", "CLL", "NO"
+  scoreByClassesMatrix <- data.frame( 
+    c(1.00, 0.50, 0.75, 0.25, 0.00),
+    c(0.50, 1.00, 0.25, 0.75, 0.50),
+    c(0.75, 0.25, 1.00, 0.50, 0.00),
+    c(0.25, 0.75, 0.50, 1.00, 0.50),
+    c(0.50, 0.75, 0.50, 0.75, 1.00)
+  );
+
+Scores:
+  length: 0.633333333333333 
+  accuracy: 0.911722141823444 
+  specificity: 0.676229508196721 
+  total: 0.813235470886416
+
+Iter = 100  | Mean = 0.7753402  | Best = 0.813235470886416 
+
+                       Best chromosome with 14 genes
+-------------------------------------------------------------------------------
+18, 48, 72, 172, 226, 589, 596, 1025, 1406, 1821, 2342, 2450, 2644, 6686

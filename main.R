@@ -41,7 +41,8 @@ GA <- ga(
   #run = 200,
   popSize = populationSize,
   pcrossover = 0.8,
-  pmutation = 0.1,
+  elitism = 0.01,
+  pmutation = 0.2,
 );
 
 #print(summary(GA));

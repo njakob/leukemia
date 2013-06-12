@@ -18,7 +18,7 @@ simmetric to emphasize "false positives" (more severe condition detected than
 it is actually suffered) than "false negatives" (which would lead to a
 deterioration in the patient's health). 
 
-                                 Best result
+                                Configuration
 -------------------------------------------------------------------------------
 
 Params:
@@ -38,6 +38,12 @@ Params:
     c(0.25, 0.75, 0.50, 1.00, 0.50),
     c(0.50, 0.75, 0.50, 0.75, 1.00)
   );
+
+  elitism = 0.05
+  pmutation = 0.1
+
+                                 Best result
+-------------------------------------------------------------------------------
 
 Scores:
   length: 0.633333333333333 

@@ -123,7 +123,7 @@ getSpecificityScore <- function(classified,classes){
   score <- 1;
   
   for (i in 1:total){
-    score <- score+scoreByClassesMatrix(diffClasses[i],diffClassified[i]);
+    score <- score+scoreByClassesMatrix[diffClasses[i],diffClassified[i]];
   }
   
   return (score/total);

@@ -1,0 +1,62 @@
+                                   Test 04
+-------------------------------------------------------------------------------
+
+In this test, we are sticking to the 5000 dataset since it seems to be good
+enough for genes recognition, and faster than the 10000 dataset. 
+
+Since it seems quite easy to find good accuracy results, but it is more
+difficult for the specificity, we are going to tweak a little bit the weights
+to prefer the latter above the former.
+
+In addition, since it seems difficult to improve specificity score over 0.8,
+and the research space is so bit, we want the algorithm to "jump" more often
+but to keep the best individuals it finds. Therefore, we will be setting the GA
+parameters to a higher mutation rate (0.2 vs 0.1), and a lower elitism (0.01 vs
+0.05), so that we can go find in different places in the space of solutions.
+
+Looking for more divergent solutions might be slower than the previous tests, 
+so we will keep the 1000 individuals population for 100 generations.
+
+As a conclusion, however, the results are not really better than in Test #03.
+An interesting pattern is that, to slightly improve the specificity, accuracy
+drops dramatically. We can conclude that a perfect solution does not exist, or 
+that it cannot be found with the current tools used.
+
+                                Configuration
+-------------------------------------------------------------------------------
+
+Params:
+  datasetSize             <- 5000;
+  maxGeneSelectionSize    <- 30;    
+  populationSize          <- 1000;
+  numGenerations          <- 100;
+  weight.chromosomeLength <- 0.1; 
+  weight.accuracy         <- 0.3; 
+  weight.specificity      <- 0.6;
+
+  # "AML", "CML", "ALL", "CLL", "NO"
+  scoreByClassesMatrix <- data.frame( 
+    c(1.00, 0.25, 0.90, 0.10, 0.00),
+    c(0.90, 1.00, 0.80, 0.70, 0.25),
+    c(0.90, 0.10, 1.00, 0.25, 0.00),
+    c(0.70, 0.80, 0.90, 1.00, 0.25),
+    c(0.50, 0.75, 0.50, 0.75, 1.00)
+  );
+
+  elitism = 0.01
+  pmutation = 0.2
+
+                                 Best result
+-------------------------------------------------------------------------------
+
+Scores:
+  length: 0.6
+  accuracy: 0.769898697539797
+  specificity: 0.827044025157233
+  total: 0.787196024356279
+
+Iter = 100  | Mean = 0.7503561  | Best = 0.787196 
+
+                       Best chromosome with 11 genes
+-------------------------------------------------------------------------------
+28, 605, 695, 2182, 2189, 2555, 2788, 2827, 3160, 3628, 4833

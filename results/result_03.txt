@@ -1,0 +1,59 @@
+                                   Test 03
+-------------------------------------------------------------------------------
+
+This third test takes the same premises than the test #02 but enlarges the 
+research to a bigger dataset (5000 genes), with a bigger population size (1000)
+and 100 generations so that the algorithm can converge.
+
+The results are quite similar so that we can conclude that there might not be
+a better solution to be found that maximizes accuracy while minimizing the
+effect of negative specificity. There is, however, a remarkable improvement
+in the size of the chromosome found (9 genes) which gives us some hope since,
+even if not more performant, hypothetic leukemia tests may be less expensive.
+
+We can also spot a pattern: the more we prefer specificity over accuracy,
+the higher is the cost to improve the first one in terms of diminishing the 
+second one.
+
+As we can see in this and previous genomes, several genes over 1000 are
+involved in the leukemia detection, but only one (Test #01) above 5000. We will
+be using this dataset in future test for better results.
+
+                                Configuration
+-------------------------------------------------------------------------------
+
+Params:
+  datasetSize             <- 5000;
+  maxGeneSelectionSize    <- 30;    
+  populationSize          <- 1000;
+  numGenerations          <- 100;
+  weight.chromosomeLength <- 0.1; 
+  weight.accuracy         <- 0.4; 
+  weight.specificity      <- 0.5;
+
+  # "AML", "CML", "ALL", "CLL", "NO"
+  scoreByClassesMatrix <- data.frame( 
+    c(1.00, 0.25, 0.90, 0.10, 0.00),
+    c(0.90, 1.00, 0.80, 0.70, 0.25),
+    c(0.90, 0.10, 1.00, 0.25, 0.00),
+    c(0.70, 0.80, 0.90, 1.00, 0.25),
+    c(0.50, 0.75, 0.50, 0.75, 1.00)
+  );
+
+  elitism = 0.05
+  pmutation = 0.1
+
+                                 Best result
+-------------------------------------------------------------------------------
+
+Scores:
+  length: 0.7 
+  accuracy: 0.819102749638206 
+  specificity: 0.8168 
+  total: 0.806041099855282
+
+Iter = 100  | Mean = 0.764375  | Best = 0.806041
+
+                       Best chromosome with 9 genes
+-------------------------------------------------------------------------------
+184, 605, 682, 1110, 1170, 1226, 2717, 3982, 4023

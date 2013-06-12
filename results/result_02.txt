@@ -1,0 +1,62 @@
+                                   Test 02
+-------------------------------------------------------------------------------
+
+Compared with the first test, in this one we are giving more importance to the
+crossed classes identification, which we have named "specificity" in the
+context of this project. We have changed the specificity matrix so that
+differences are more evident between desired or tolerated and unwanted results.
+In addition, we have set weights so that specificity is slightly more important
+than accuracy, in the hope that this will lead the algorithm to different 
+positions in the space of solutions.
+
+Additionally, we've set this test for a short run so that we can quickly get
+some results (1000 genes, 200 individuals, 30 generations).
+
+The results prove that we are actually getting slightly worse accuracy results
+(0.858 vs 0.911) but slighly better specificity results too (0.772 vs 0.676).
+So the increase in specificity is about one tenth but the decrease in accuracy 
+is only around half that value. This might lead to somewhat less accurate tests
+but that in turn are less harmful for the patient when they are wrong.
+
+In the next test, we will extend this conditions to a larger population and
+gene set to see whether by increasing the space of solutions we can get a
+better convergence.
+
+                                Configuration
+-------------------------------------------------------------------------------
+
+Params:
+  datasetSize             <- 1000;
+  maxGeneSelectionSize    <- 30;    
+  populationSize          <- 200;
+  numGenerations          <- 30;
+  weight.chromosomeLength <- 0.1; 
+  weight.accuracy         <- 0.4; 
+  weight.specificity      <- 0.5;
+
+  # "AML", "CML", "ALL", "CLL", "NO"
+  scoreByClassesMatrix <- data.frame( 
+    c(1.00, 0.25, 0.90, 0.10, 0.00),
+    c(0.90, 1.00, 0.80, 0.70, 0.25),
+    c(0.90, 0.10, 1.00, 0.25, 0.00),
+    c(0.70, 0.80, 0.90, 1.00, 0.25),
+    c(0.50, 0.75, 0.50, 0.75, 1.00)
+  );
+
+  elitism = 0.05
+  pmutation = 0.1
+
+                                 Best result
+-------------------------------------------------------------------------------
+
+Scores:
+  length: 0.533333333333333 
+  accuracy: 0.858176555716353 
+  specificity: 0.771938775510204 
+  total: 0.782573343374976
+
+Iter = 30  | Mean = 0.7351626  | Best = 0.7825733  
+
+                       Best chromosome with 14 genes
+-------------------------------------------------------------------------------
+12, 95, 104, 258, 281, 301, 338, 348, 414, 424, 518, 564, 732, 857
